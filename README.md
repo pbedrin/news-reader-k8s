@@ -44,7 +44,7 @@ minikube service app-service --url
 
 Request:
 ```
-curl -X POST "http://192.168.49.2:31978/extract/?url=https://news.sky.com/story/woman-dies-and-two-others-left-injured-after-car-hits-pedestrians-near-crawley-leisure-centre-13348075"
+curl -X POST "http://<IP>:<PORT>/extract/?url=https://news.sky.com/story/woman-dies-and-two-others-left-injured-after-car-hits-pedestrians-near-crawley-leisure-centre-13348075"
 ```
 
 Response:

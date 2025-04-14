@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      initContainers:
+      - name: wait-for-mysql
+        image: busybox
+        command: ['sh', '-c', 'until nc -z mysql-service 3306; do echo waiting for mysql; sleep 2; done;']
+      containers:
+      - name: app
+        image: news-reader:latest
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "mysql+pymysql://user:password@mysql-service:3306/newslist"
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  type: NodePort
+  selector:
+    app: app
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
